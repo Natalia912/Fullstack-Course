@@ -7,19 +7,26 @@ const Statistics = ({good, neutral, bad, all, average, positive}) => {
         <h2>statistics</h2>
         {all > 0 ? (
           <ul className='list'>
-          <li>good {good}</li>
-          <li>neutral {neutral}</li>
-          <li>bad {bad}</li>
-          <li>all {all}</li>
-          <li>average {average ? average : 0}</li>
-          <li>positive {positive ? positive : 0}%</li>
-        </ul>
+            <StatisticLine value={good} text={"good"} />
+            <StatisticLine value={neutral} text={"neutral"} />
+            <StatisticLine value={bad} text={"bad"} />
+            <StatisticLine value={all} text={"all"} />
+            <StatisticLine value={average} text={"average"} />
+            <StatisticLine value={positive} text={"positive"} />
+            
+          </ul>
         ) :
         <p>No feedback given</p>}
         
       </section>
   )
 }
+
+const Button = ({setState, text}) => <button onClick={setState}>{text}</button>
+
+
+const StatisticLine = ({value, text}) => <li>{text} {value ? value : 0}{text === "positive" && '%'}</li>
+
 
 function App() {
   const [good, setGood] = useState(0)
@@ -35,9 +42,9 @@ function App() {
       <section className='feedback'>
         <h2>give feedback</h2>
         <div className='buttons'>
-          <button onClick={() => setGood(prev => prev + 1)}>good</button>
-          <button onClick={() => setNeutral(prev => prev + 1)}>neutral</button>
-          <button onClick={() => setBad(prev => prev + 1)}>bad</button>
+          <Button setState={() => setGood(prev => prev + 1)} text={"good"}/>
+          <Button setState={() => setNeutral(prev => prev + 1)} text={"neutral"}/>
+          <Button setState={() => setBad(prev => prev + 1)} text={"bad"}/>
         </div>
       </section>
       <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive} />
