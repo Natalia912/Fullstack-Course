@@ -5,14 +5,18 @@ const Statistics = ({good, neutral, bad, all, average, positive}) => {
   return (
     <section className='statistics'>
         <h2>statistics</h2>
-        <div className='buttons'>
-          <p>good {good}</p>
-          <p>neutral {neutral}</p>
-          <p>bad {bad}</p>
-          <p>all {all}</p>
-          <p>average {average ? average : 0}</p>
-          <p>positive {positive ? positive : 0}%</p>
-        </div>
+        {all > 0 ? (
+          <ul className='list'>
+          <li>good {good}</li>
+          <li>neutral {neutral}</li>
+          <li>bad {bad}</li>
+          <li>all {all}</li>
+          <li>average {average ? average : 0}</li>
+          <li>positive {positive ? positive : 0}%</li>
+        </ul>
+        ) :
+        <p>No feedback given</p>}
+        
       </section>
   )
 }
