@@ -6,15 +6,16 @@ const Statistics = ({good, neutral, bad, all, average, positive}) => {
     <section className='statistics'>
         <h2>statistics</h2>
         {all > 0 ? (
-          <ul className='list'>
-            <StatisticLine value={good} text={"good"} />
-            <StatisticLine value={neutral} text={"neutral"} />
-            <StatisticLine value={bad} text={"bad"} />
-            <StatisticLine value={all} text={"all"} />
-            <StatisticLine value={average} text={"average"} />
-            <StatisticLine value={positive} text={"positive"} />
-            
-          </ul>
+          <table className='list'>
+            <tbody>
+              <StatisticLine value={good} text={"good"} />
+              <StatisticLine value={neutral} text={"neutral"} />
+              <StatisticLine value={bad} text={"bad"} />
+              <StatisticLine value={all} text={"all"} />
+              <StatisticLine value={average} text={"average"} />
+              <StatisticLine value={positive} text={"positive"} />
+            </tbody>
+          </table>
         ) :
         <p>No feedback given</p>}
         
@@ -25,7 +26,11 @@ const Statistics = ({good, neutral, bad, all, average, positive}) => {
 const Button = ({setState, text}) => <button onClick={setState}>{text}</button>
 
 
-const StatisticLine = ({value, text}) => <li>{text} {value ? value : 0}{text === "positive" && '%'}</li>
+const StatisticLine = ({value, text}) => (
+  <tr>
+    <td>{text}</td>
+    <td>{value ? value : 0}{text === "positive" && '%'}</td>
+  </tr>)
 
 
 function App() {
