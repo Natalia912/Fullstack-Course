@@ -1,7 +1,11 @@
 function Total({parts}) {
+
+  const total = parts.reduce((pv, cv) => pv + cv.exercises, 0)
   return ( 
     <>
-      <p>Number of exercises {parts[0].exercises + parts[1].exercises + parts[2].exercises}</p>
+      <p style={{fontWeight: "bold"}}>
+        total of {total} exercises
+      </p>
     </>
   );
 }
