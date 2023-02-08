@@ -9,8 +9,13 @@ function App() {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    setPersons(prev => [...prev, {name: newName}])
-    setNewName('')
+    if (persons.find(person => person.name === newName)) {
+      alert(`${newName} is already added to the phonebook`)
+      setNewName('')
+    } else {
+      setPersons(prev => [...prev, {name: newName}])
+      setNewName('')
+    }
   }
 
   return (
