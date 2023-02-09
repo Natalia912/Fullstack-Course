@@ -8,4 +8,6 @@ const addNote = (note) => axios.post(BASE_URL, note).then(res => res.data)
 
 const updateNote = (id, newNote) => axios.put(`${BASE_URL}/${id}`, newNote)
 
-export default { getAllNotes, addNote, updateNote }
+const deleteNote = (id) => axios.delete(`${BASE_URL}/${id}`)
+
+export default { getAllNotes, addNote, updateNote, deleteNote }

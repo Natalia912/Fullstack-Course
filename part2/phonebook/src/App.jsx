@@ -51,7 +51,7 @@ function App() {
       <Filter search={search} handleSearch={handleSearch} />
       <PersonForm newPerson={newPerson} setNewPerson={setNewPerson} handleSubmit={handleSubmit} />
       <h2>Numbers</h2>
-      <NumbersList persons={persons} search={search} />
+      <NumbersList persons={persons} search={search} setPersons={setPersons} />
     </div>
   )
 }
