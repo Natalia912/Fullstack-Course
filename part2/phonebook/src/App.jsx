@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+
+import notesServices from './services/notes'
 
 import PersonForm from './components/personForm'
 import NumbersList from './components/NumbersList'
@@ -16,12 +17,11 @@ function App() {
 
   const [search, setSearch] = useState('')
 
-  const BASE_URL = 'http://localhost:3001/persons'
 
   useEffect(() => {
-    axios
-    .get(BASE_URL)
-    .then(res =>setPersons(res.data))
+    notesServices
+    .getAllNotes()
+    .then(data =>setPersons(data))
   }, [])
 
    const handleSearch = (event) => {
@@ -34,9 +34,8 @@ function App() {
       alert(`${newPerson.name} is already added to the phonebook`)
       
     } else {
-      axios
-        .post(BASE_URL, newPerson)
-        .then(res => res.data)
+      notesServices
+        .addNote(newPerson)
         .then(data => setPersons(prev => [...prev, data]))
     }
 
