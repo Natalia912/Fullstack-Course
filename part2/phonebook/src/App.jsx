@@ -30,8 +30,19 @@ function App() {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (persons.find(person => person.name === newPerson.name)) {
-      alert(`${newPerson.name} is already added to the phonebook`)
+    const confirmMessage = `${newPerson.name} is already added to the phonebook, replace the old number with a new one?`
+    if (persons.some(person => person.name === newPerson.name)) {
+      if (window.confirm(confirmMessage)) {
+        const person = persons.find(person => person.name === newPerson.name)
+        notesServices
+          .updateNote(person.id, {...person, number: newPerson.number})
+          .then(newPerson => {
+            setPersons(
+              prev => prev.map(prevPerson => prevPerson.name === newPerson.name ? newPerson : prevPerson)
+            )
+          })
+          
+      }
       
     } else {
       notesServices
