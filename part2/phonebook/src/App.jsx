@@ -47,6 +47,11 @@ function App() {
             setTimeout(() => {
               setNotification({status: '', message: ''})
             }, 3000)
+          }).catch((err) => {
+            setNotification({status: 'error', message: `Information of ${newPerson.name} has already been removed from server`})
+            setTimeout(() => {
+              setNotification({status: '', message: ''})
+            }, 3000)
           })
           
       }
