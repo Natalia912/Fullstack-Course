@@ -5,6 +5,7 @@ import notesServices from './services/notes'
 import PersonForm from './components/personForm'
 import NumbersList from './components/NumbersList'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import './App.css'
 
 
@@ -16,6 +17,8 @@ function App() {
   })
 
   const [search, setSearch] = useState('')
+
+  const [notification, setNotification] = useState({status: '', message: ''})
 
 
   useEffect(() => {
@@ -40,6 +43,10 @@ function App() {
             setPersons(
               prev => prev.map(prevPerson => prevPerson.name === newPerson.name ? newPerson : prevPerson)
             )
+            setNotification({status: 'success', message: `Updated ${newPerson.name}`})
+            setTimeout(() => {
+              setNotification({status: '', message: ''})
+            }, 3000)
           })
           
       }
@@ -47,7 +54,13 @@ function App() {
     } else {
       notesServices
         .addNote(newPerson)
-        .then(data => setPersons(prev => [...prev, data]))
+        .then(data => {
+          setPersons(prev => [...prev, data])
+          setNotification({status: 'success', message: `Added ${newPerson.name}`})
+            setTimeout(() => {
+              setNotification({status: '', message: ''})
+            }, 3000)
+        })
     }
 
     setNewPerson({
@@ -59,6 +72,7 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification status={notification.status} message={notification.message} />
       <Filter search={search} handleSearch={handleSearch} />
       <PersonForm newPerson={newPerson} setNewPerson={setNewPerson} handleSubmit={handleSubmit} />
       <h2>Numbers</h2>

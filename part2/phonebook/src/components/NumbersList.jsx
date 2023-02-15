@@ -6,13 +6,13 @@ const NumbersList = ({persons, search, setPersons}) => {
     if (window.confirm(`Delete ${name}?`)) {
       notesServices.deleteNote(id)
         .then(
-          (res) => {
+          () => {
             const updatedList = persons.filter(p => p.id !== id)
             setPersons(updatedList)
           }
         )
         .catch(
-          (err) => {
+          () => {
             alert('the item does not exist')
           }
         )
