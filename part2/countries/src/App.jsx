@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import {getCountries} from './countries'
+import Country from './Country'
 import './App.css'
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
       then(data => setData(data))
   }, [])
 
-  const countriesList = data?.filter(country => country.name.common.toLowerCase().includes(search.toLowerCase())).map(country => <li key={country.name.common}>{country.name.common}</li>)
+  const countriesList = data?.filter(country => country.name.common.toLowerCase().includes(search.toLowerCase()))
 
   return (
     <div className="App">
@@ -23,7 +24,19 @@ function App() {
         <p>find countries</p>
         <input type='text' value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
-      {data && data.length > 10 ? <p>Too many matches, specify another filter</p> : countriesList}
+      {
+        countriesList?.length > 10 ? 
+          <p>Too many matches, specify another filter</p> : 
+          countriesList?.length === 1 ?
+          <Country 
+            name={countriesList[0].name.common}
+            capital={countriesList[0].capital[0]} 
+            area={countriesList[0].area}
+            languages={countriesList[0].languages} 
+            flag={countriesList[0].flags.png}
+          /> :
+          countriesList?.map(country => <li key={country.name.common}>{country.name.common}</li>)
+      } 
       
     </div>
   )
