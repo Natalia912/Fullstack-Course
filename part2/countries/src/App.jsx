@@ -15,7 +15,6 @@ function App() {
   }, [])
 
   const countriesList = data?.filter(country => country.name.common.toLowerCase().includes(search.toLowerCase()))
-
   const showCountry = (name) => {
     let country = [...countriesList].find(c => c.name.common === name)
     setShow(country)
@@ -37,6 +36,7 @@ function App() {
             area={countriesList[0].area}
             languages={countriesList[0].languages} 
             flag={countriesList[0].flags.png}
+            latlng={countriesList[0].capitalInfo.latlng}
           /> :
           countriesList?.map(country => (
             <li key={country.name.common}>
@@ -45,13 +45,16 @@ function App() {
             </li>))
       }
 
-      {show && <Country 
-                name={show.name.common}
-                capital={show.capital[0]} 
-                area={show.area}
-                languages={show.languages} 
-                flag={show.flags.png}
-              />}
+      {show && 
+        (<Country 
+          name={show.name.common}
+          capital={show.capital[0]} 
+          area={show.area}
+          languages={show.languages} 
+          flag={show.flags.png}
+          latlng={show.capitalInfo.latlng}
+        />)
+      }
       
     </div>
   )
