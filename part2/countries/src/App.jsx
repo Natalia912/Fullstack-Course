@@ -6,10 +6,8 @@ import './App.css'
 function App() {
 
   const [data, setData] = useState(null)
-
-  console.log(data)
-
   const [search, setSearch] = useState('')
+  const [show, setShow] = useState(null)
 
   useEffect(() => {
     getCountries.
@@ -17,6 +15,11 @@ function App() {
   }, [])
 
   const countriesList = data?.filter(country => country.name.common.toLowerCase().includes(search.toLowerCase()))
+
+  const showCountry = (name) => {
+    let country = [...countriesList].find(c => c.name.common === name)
+    setShow(country)
+  }
 
   return (
     <div className="App">
@@ -35,8 +38,20 @@ function App() {
             languages={countriesList[0].languages} 
             flag={countriesList[0].flags.png}
           /> :
-          countriesList?.map(country => <li key={country.name.common}>{country.name.common}</li>)
-      } 
+          countriesList?.map(country => (
+            <li key={country.name.common}>
+              <span>{country.name.common}</span>
+              <button onClick={() => showCountry(country.name.common)}>show</button>
+            </li>))
+      }
+
+      {show && <Country 
+                name={show.name.common}
+                capital={show.capital[0]} 
+                area={show.area}
+                languages={show.languages} 
+                flag={show.flags.png}
+              />}
       
     </div>
   )
