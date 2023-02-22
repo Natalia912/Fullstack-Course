@@ -25,7 +25,13 @@ const persons = [
     }
 ]
 
+const len = persons.length
+
 app.get('/api/persons', (request, response) => response.send(persons))
+
+app.get('/info', (request, response) => {
+    response.send(`<p>Phonebook has info for ${len} people</p>${new Date()}<p></p>`)
+  })
 
 const PORT = 3000
 app.listen(PORT, () => {
