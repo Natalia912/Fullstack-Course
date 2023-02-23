@@ -50,12 +50,30 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-  const note = request.body
+  const person = request.body
+
+  if (!person.name) {
+    return response.status(400).json({ 
+      error: 'name is missing' 
+    })
+  }
+
+  if (!person.number) {
+    return response.status(400).json({ 
+      error: 'number is missing' 
+    })
+  }
+
+  if (persons.find(p => p.name === person.name)) {
+    return response.status(400).json({ 
+      error: 'name must be unique' 
+    })
+  }
 
   const newId = Math.ceil(Math.random()*10000)
-  response.json(note)
+  response.json(person)
 
-  persons = persons.concat({...note, id: newId})
+  persons = persons.concat({...person, id: newId})
 })
 
 
