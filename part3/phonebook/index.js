@@ -84,10 +84,13 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const newId = Math.ceil(Math.random()*10000)
-  response.json(person)
+  const newPerson = new Person({
+    name: person.name,
+    number: person.number
+  })
 
-  persons = persons.concat({...person, id: newId})
+  newPerson.save().then(savedPerson => response.json(savedPerson))
+
 })
 
 
