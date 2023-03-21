@@ -42,7 +42,6 @@ let persons = [
     }
 ]
 
-const len = persons.length
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => response.json(persons))
@@ -61,10 +60,12 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
 
-  Person.findByIdAndRemove(request.params.id).then(
+  Person.findByIdAndRemove(request.params.id)
+  .then(
     result => {
       response.status(204).end()
-    }).catch(error => next(error))
+    })
+  .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
@@ -82,12 +83,6 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  if (persons.find(p => p.name === person.name)) {
-    return response.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  }
-
   const newPerson = new Person({
     name: person.name,
     number: person.number
@@ -97,12 +92,44 @@ app.post('/api/persons', (request, response) => {
 
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updated => {
+      response.json(updated)
+    })
+    .catch(error => next(error))
+})
+
+let count = Person.countDocuments({})
 
 app.get('/info', (request, response) => {
-  response.send(`<p>Phonebook has info for ${len} people</p>${new Date()}<p></p>`)
+
+  Person.countDocuments().then(result => {
+    response.send(`<p>Phonebook has info for ${result} people</p>${new Date()}<p></p>`)
+});
+  // response.send(`<p>Phonebook has info for ${count} people</p>${new Date()}<p></p>`)
 })
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
