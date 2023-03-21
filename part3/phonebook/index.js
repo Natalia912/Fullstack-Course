@@ -48,19 +48,23 @@ app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => response.json(persons))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
 
-  Person.findById(id).then(person => response.json(person)).catch(err => response.status(404).end())
+  Person.findById(id).then(person => {
+    if (person) {
+      response.json(person)
+    } else response.status(404).end()
+  }).catch(error => next(error))
 
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
+app.delete('/api/persons/:id', (request, response, next) => {
 
-  persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
+  Person.findByIdAndRemove(request.params.id).then(
+    result => {
+      response.status(204).end()
+    }).catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
