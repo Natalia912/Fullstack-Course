@@ -30,13 +30,13 @@ const person = new Person({
 
 if (process.argv.length === 3) {
   Person.find({}).then(result => {
-    result.forEach(person =>{ console.log(`${person.name} ${person.number}`)})
+    result.forEach(person => { console.log(`${person.name} ${person.number}`)})
     mongoose.connection.close()
   })
 }
 
 if (process.argv.length > 3 && process.argv.length < 6) {
-  person.save().then(result => {
+  person.save().then(() => {
     console.log(`added ${newName} number ${newNumber} to phonebook`)
     mongoose.connection.close()
   })

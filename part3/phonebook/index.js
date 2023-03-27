@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -15,9 +15,9 @@ morgan.token('body-content', function getBody (req) { return JSON.stringify(req.
 
 app.use(morgan(
   ':method :url :status :res[content-length] - :response-time ms :body-content'
-, {
-  skip: function (req, res) { return req.method !== 'POST' }
-}))
+  , {
+    skip: function (req) { return req.method !== 'POST' }
+  }))
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => response.json(persons))
@@ -37,25 +37,25 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
 
   Person.findByIdAndRemove(request.params.id)
-  .then(
-    result => {
-      response.status(204).end()
-    })
-  .catch(error => next(error))
+    .then(
+      () => {
+        response.status(204).end()
+      })
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
   const person = request.body
 
   if (!person.name) {
-    return response.status(400).json({ 
-      error: 'name is missing' 
+    return response.status(400).json({
+      error: 'name is missing'
     })
   }
 
   if (!person.number) {
-    return response.status(400).json({ 
-      error: 'number is missing' 
+    return response.status(400).json({
+      error: 'number is missing'
     })
   }
 
@@ -71,9 +71,9 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const {name, number} = request.body
+  const { name, number } = request.body
 
-  Person.findByIdAndUpdate(request.params.id, {name, number}, { new: true, runValidators: true, context: 'query' })
+  Person.findByIdAndUpdate(request.params.id, { name, number }, { new: true, runValidators: true, context: 'query' })
     .then(updated => {
       response.json(updated)
     })
@@ -85,7 +85,7 @@ app.get('/info', (request, response) => {
 
   Person.countDocuments().then(result => {
     response.send(`<p>Phonebook has info for ${result} people</p>${new Date()}<p></p>`)
-});
+  })
 })
 
 const PORT = process.env.PORT || 3001
