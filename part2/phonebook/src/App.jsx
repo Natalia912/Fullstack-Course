@@ -66,6 +66,12 @@ function App() {
               setNotification({status: '', message: ''})
             }, 3000)
         })
+        .catch(error => {
+          setNotification({status: 'error', message: error.response.data.error})
+           setTimeout(() => {
+              setNotification({status: '', message: ''})
+            }, 3000)
+        })
     }
 
     setNewPerson({
