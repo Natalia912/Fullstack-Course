@@ -72,3 +72,37 @@ test('if request is missing likes property then it defaults to 0', async () => {
   const addedBlog = response.body.find(blog => blog.title === withoutLikes.title)
   expect(addedBlog.likes).toEqual(0)
 })
+
+test('request body is missing title', async () => {
+  const withoutTitle = {
+    author: "wt Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    likes: 0,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(withoutTitle)
+    .expect(400)
+
+  const response = await api.get('/api/blogs')
+
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
+})
+
+test('request body is missing url', async () => {
+  const withoutUrl = {
+    title: 'without Url',
+    author: "wt Robert C. Martin",
+    likes: 0,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(withoutUrl)
+    .expect(400)
+
+  const response = await api.get('/api/blogs')
+
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
+})
