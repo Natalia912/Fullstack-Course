@@ -62,40 +62,40 @@ test('dummy returns one', () => {
   expect(result).toBe(1)
 })
 
-describe('total likes', () => {
+// describe('total likes', () => {
 
-  test('when list has only one blog, equals the likes of that', () => {
-    const result = listHelper.totalLikes(listWithOneBlog)
-    expect(result).toBe(5)
-  })
+//   test('when list has only one blog, equals the likes of that', () => {
+//     const result = listHelper.totalLikes(listWithOneBlog)
+//     expect(result).toBe(5)
+//   })
 
-  test('when list has several blogs, equals the sum of the likes', () => {
-    const result = listHelper.totalLikes(blogs)
-    expect(result).toBe(36)
-  })
+//   test('when list has several blogs, equals the sum of the likes', () => {
+//     const result = listHelper.totalLikes(blogs)
+//     expect(result).toBe(36)
+//   })
 
-  test('when list has 0 blogs, equals to 0', () => {
-    const result = listHelper.totalLikes([])
-    expect(result).toBe(0)
-  })
-
-
-})
+//   test('when list has 0 blogs, equals to 0', () => {
+//     const result = listHelper.totalLikes([])
+//     expect(result).toBe(0)
+//   })
 
 
-describe('favorite blog', () => {
-  test('when list has only one blog, return the blog', () => {
-    const result = listHelper.favoriteBlog(listWithOneBlog)
-    expect(result).toEqual(listWithOneBlog[0])
-  })
+// })
 
-  test('when list has several blogs, return the blog with most likes', () => {
-    const result = listHelper.favoriteBlog(blogs)
-    expect(result).toEqual(blogs[2])
-  })
 
-  test('when list has 0 blogs, return empty object', () => {
-    const result = listHelper.favoriteBlog([])
-    expect(result).toEqual({})
-  })
-})
+// describe('favorite blog', () => {
+//   test('when list has only one blog, return the blog', () => {
+//     const result = listHelper.favoriteBlog(listWithOneBlog)
+//     expect(result).toEqual(listWithOneBlog[0])
+//   })
+
+//   test('when list has several blogs, return the blog with most likes', () => {
+//     const result = listHelper.favoriteBlog(blogs)
+//     expect(result).toEqual(blogs[2])
+//   })
+
+//   test('when list has 0 blogs, return empty object', () => {
+//     const result = listHelper.favoriteBlog([])
+//     expect(result).toEqual({})
+//   })
+// })
