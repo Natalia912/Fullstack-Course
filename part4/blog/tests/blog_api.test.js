@@ -54,3 +54,21 @@ test('adding a new blog to the database', async () => {
   const blogsTitles = response.body.map(blog => blog.title)
   expect(blogsTitles).toContain(newBlog.title)
 })
+
+test('if request is missing likes property then it defaults to 0', async () => {
+  const withoutLikes = {
+    title: "Blog Without Likes",
+    author: "Robert Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll"
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(withoutLikes)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const addedBlog = response.body.find(blog => blog.title === withoutLikes.title)
+  expect(addedBlog.likes).toEqual(0)
+})
