@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
 const helper = require('./test_helper')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const api = supertest(app)
 
 
@@ -156,6 +158,8 @@ describe('test put method', () => {
 })
 
 
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
+
