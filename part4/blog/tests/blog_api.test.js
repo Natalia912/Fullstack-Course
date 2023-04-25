@@ -44,6 +44,7 @@ describe('testing post requests', () => {
       author: "Robert C. Martin",
       url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
       likes: 0,
+      user: "3456234dusfh934"
     }
 
     await api
@@ -64,7 +65,8 @@ describe('testing post requests', () => {
     const withoutLikes = {
       title: "Blog Without Likes",
       author: "Robert Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll"
+      url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+      user: "43587235"
     }
 
     await api
