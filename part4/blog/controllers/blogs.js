@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken')
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
 
 
 blogRouter.get('/', async (request, response) => {
@@ -14,11 +12,7 @@ blogRouter.post('/', async (request, response) => {
 
   let requestContent = request.body
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  if (!decodedToken.id) {
-    return response.status(401).json({error: 'token is invalid'})
-  }
+  const user = request.user
 
   if (!requestContent.likes) {
     requestContent.likes = 0
@@ -27,8 +21,6 @@ blogRouter.post('/', async (request, response) => {
   if (!requestContent.title || !requestContent.url) {
     return response.status(400).end()
   } 
-
-  const user = await User.findById(decodedToken.id)
   
   const blog = new Blog({
     title: requestContent.title,
@@ -48,13 +40,8 @@ blogRouter.post('/', async (request, response) => {
 
 blogRouter.delete('/:id', async (request, response) => {
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  if (!decodedToken.id) {
-    return response.status(401).json({error: 'token is invalid'})
-  }
+  const user = request.user
   const blog = await Blog.findById(request.params.id)
-  const user = await User.findById(decodedToken.id)
 
   if (!user) {
     return response.status(400).json({error: "user is not found"})
