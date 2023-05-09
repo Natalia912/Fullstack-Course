@@ -1,17 +1,35 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const helper = require('./test_helper')
 const app = require('../app')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const api = supertest(app)
 
+let token = null
+
 
 beforeEach(async () => {
+  await User.deleteMany({})
+
+  const newUser = {
+    username: "root",
+    name: "root",
+    password: "secret"
+  }
+
+  let newUserResponse = await api
+    .post('/api/users')
+    .send(newUser)
+
+  let response = await api.post('/api/login').send(newUser)
+  token = response.body.token
+
   await Blog.deleteMany()
 
-  const blogsObj = helper.initialBlogs.map(blog => new Blog(blog))
+  const blogsObj = helper.initialBlogs.map(blog => new Blog({...blog, user: newUserResponse.body.id}))
   const savedBlogs = blogsObj.map(sb => sb.save())
 
   await Promise.all(savedBlogs)
@@ -20,7 +38,7 @@ beforeEach(async () => {
 
 describe('testing initially saved notes', () => {
 
-  test('the amount of blog posts is ?', async () => {
+  test('the amount of blog posts is 2', async () => {
     const response = await api.get('/api/blogs')
 
     expect(response.status).toBe(200)
@@ -44,17 +62,17 @@ describe('testing post requests', () => {
       author: "Robert C. Martin",
       url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
       likes: 0,
-      user: "3456234dusfh934"
     }
 
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const response = await api.get('/api/blogs')
-
+    
     expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
 
     const blogsTitles = response.body.map(blog => blog.title)
@@ -66,12 +84,12 @@ describe('testing post requests', () => {
       title: "Blog Without Likes",
       author: "Robert Martin",
       url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-      user: "43587235"
     }
 
     await api
       .post('/api/blogs')
       .send(withoutLikes)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -90,6 +108,7 @@ describe('testing post requests', () => {
     await api
       .post('/api/blogs')
       .send(withoutTitle)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
 
     const response = await api.get('/api/blogs')
@@ -107,11 +126,25 @@ describe('testing post requests', () => {
     await api
       .post('/api/blogs')
       .send(withoutUrl)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
 
     const response = await api.get('/api/blogs')
 
     expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('user is unauthorized', async () => {
+    const blog = {
+      title: 'without Url',
+      author: "wt Robert C. Martin",
+      likes: 0
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blog)
+      .expect(401)
   })
 })
 
@@ -124,6 +157,7 @@ describe('test delete method', () => {
 
     await api
       .delete(`/api/blogs/${id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const newResponse = await api.get('/api/blogs')
@@ -158,7 +192,6 @@ describe('test put method', () => {
     expect(theBlog.likes).toEqual(blogToUpdate.likes + 1)
   })
 })
-
 
 
 afterAll(async () => {
