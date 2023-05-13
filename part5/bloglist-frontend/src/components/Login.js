@@ -1,6 +1,12 @@
+import { useState } from "react"
 import loginUser from "../services/login"
 
-const Login = ({user, setUser}) => {
+const Login = ({loggedUser, setLoggedUser}) => {
+
+  const [user, setUser] = useState({
+    username: "",
+    password: ""
+  })
 
   const handleChange = (e, inputName) => {
     setUser(prev => ({
@@ -12,10 +18,15 @@ const Login = ({user, setUser}) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     loginUser(user).then(data => {
-      setUser(prev => ({
-        ...prev,
-        token: data.token
-      }))
+      setLoggedUser(data)
+      window.localStorage.setItem("user", JSON.stringify(data))
+    }).catch(error => {
+      console.log(error)
+    })
+
+    setUser({
+      username: "",
+      password: ""
     })
   }
   return (

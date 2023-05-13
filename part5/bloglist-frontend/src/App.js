@@ -5,11 +5,8 @@ import blogService from './services/blogs'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
-    token: null
-  })
+
+  const [loggedUser, setLoggedUser] = useState(null)
 
 
   useEffect(() => {
@@ -18,11 +15,30 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('user')
+
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setLoggedUser(user)
+    }
+  }, [])
+
+  const logOut = () => {
+    window.localStorage.removeItem('user')
+    setLoggedUser(null)
+  }
+
   return (
     <div>
-      {!user.token && <Login user={user} setUser={setUser} />}
+      {!loggedUser && <Login loggedUser={loggedUser} setLoggedUser={setLoggedUser} />}
       <h2>blogs</h2>
-      {user.token && (<p>{user.username} logged in</p>)}
+      {loggedUser && (
+        <div>
+          <p>{loggedUser.username} logged in</p>
+          <button onClick={logOut}>Logout</button>
+        </div>
+      )}
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
