@@ -23,6 +23,11 @@ const NewBlogForm = ({setBlogs, notificationPopup}) => {
     } else {
       blogServices.postNewBlog(blog).then(data => {
         setBlogs(prev => ([...prev, data]))
+        setBlog({
+          title: "",
+          author: "",
+          url: ""
+        })
         notificationPopup(`a new blog ${data.title} by ${data.author}`, true)
       }).catch(error => {
         notificationPopup(error, false)
