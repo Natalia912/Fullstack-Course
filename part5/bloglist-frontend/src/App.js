@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import Login from './components/Login'
 import blogService from './services/blogs'
 import NewBlogForm from './components/NewBlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -64,9 +65,11 @@ const App = () => {
       <h2>blogs</h2>
       {loggedUser && (
         <div>
-          <p>{loggedUser.username} logged in</p>
+          <p style={{display: 'inline-block'}}>{loggedUser.username} logged in</p>
           <button onClick={logOut}>Logout</button>
-          <NewBlogForm setBlogs={setBlogs} notificationPopup={notificationPopup} />
+          <Togglable label="new note">
+            <NewBlogForm setBlogs={setBlogs} notificationPopup={notificationPopup} />
+          </Togglable>
         </div>
       )}
       {blogs.map(blog =>

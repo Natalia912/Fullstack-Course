@@ -31,24 +31,27 @@ const NewBlogForm = ({setBlogs, notificationPopup}) => {
   }
 
   return (
-    <form 
-      style={{display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'flex-start'}}
-      onSubmit={(e) => handleSubmit(e)}
-    >
-      <label>
-        <span>title</span>
-        <input type="text" value={blog.title} onChange={(e) => handleChange(e, 'title')} />
-      </label>
-      <label>
-        <span>author</span>
-        <input type="text" value={blog.author} onChange={(e) => handleChange(e, 'author')} />
-      </label>
-      <label>
-        <span>url</span>
-        <input type="text" value={blog.url} onChange={(e) => handleChange(e, 'url')} />
-      </label>
-      <button type='submit'>Create</button>
-    </form>
+    <>
+      <h2>create new blog</h2>
+      <form 
+        style={{display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'flex-start', marginBottom: "1rem"}}
+        onSubmit={(e) => handleSubmit(e)}
+      >
+        <label>
+          <span>title</span>
+          <input type="text" value={blog.title} onChange={(e) => handleChange(e, 'title')} />
+        </label>
+        <label>
+          <span>author</span>
+          <input type="text" value={blog.author} onChange={(e) => handleChange(e, 'author')} />
+        </label>
+        <label>
+          <span>url</span>
+          <input type="text" value={blog.url} onChange={(e) => handleChange(e, 'url')} />
+        </label>
+        <button type='submit'>Create</button>
+      </form>
+    </>
   )
 }
 
