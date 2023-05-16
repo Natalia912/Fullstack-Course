@@ -1,8 +1,8 @@
 import { useState } from "react"
 import loginUser from "../services/login"
-import blogServices from '../services/blogs'
+import blogServices from "../services/blogs"
 
-const Login = ({ setLoggedUser, notificationPopup}) => {
+const Login = ({ setLoggedUser, notificationPopup }) => {
 
   const [user, setUser] = useState({
     username: "",
@@ -12,9 +12,9 @@ const Login = ({ setLoggedUser, notificationPopup}) => {
   const handleChange = (e, inputName) => {
     setUser(prev => ({
       ...prev,
-      [inputName]: e.target.value 
+      [inputName]: e.target.value
     }))
-  }  
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -40,14 +40,14 @@ const Login = ({ setLoggedUser, notificationPopup}) => {
   return (
     <>
       <h2>Log in to application</h2>
-      <form autoComplete='off' style={{display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'flex-start'}}>
+      <form autoComplete='off' style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start" }}>
         <label>
           <span>username</span>
-          <input type="text" value={user.username} autoComplete='off' onChange={(e) => handleChange(e, 'username')} />
+          <input type="text" value={user.username} autoComplete='off' onChange={(e) => handleChange(e, "username")} />
         </label>
         <label>
           <span>password</span>
-          <input type="password" value={user.password} autoComplete='off' onChange={(e) => handleChange(e, 'password')}/>
+          <input type="password" value={user.password} autoComplete='off' onChange={(e) => handleChange(e, "password")}/>
         </label>
         <button onClick={(e) => handleSubmit(e)}>Login</button>
       </form>

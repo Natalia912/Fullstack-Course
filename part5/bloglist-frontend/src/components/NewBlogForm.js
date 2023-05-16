@@ -1,7 +1,7 @@
 import { useState } from "react"
-import blogServices from '../services/blogs'
+import blogServices from "../services/blogs"
 
-const NewBlogForm = ({setBlogs, notificationPopup}) => {
+const NewBlogForm = ({ setBlogs, notificationPopup }) => {
 
   const [blog, setBlog] = useState({
     title: "",
@@ -12,9 +12,9 @@ const NewBlogForm = ({setBlogs, notificationPopup}) => {
   const handleChange = (e, inputName) => {
     setBlog(prev => ({
       ...prev,
-      [inputName]: e.target.value 
+      [inputName]: e.target.value
     }))
-  } 
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -38,21 +38,21 @@ const NewBlogForm = ({setBlogs, notificationPopup}) => {
   return (
     <>
       <h2>create new blog</h2>
-      <form 
-        style={{display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'flex-start', marginBottom: "1rem"}}
+      <form
+        style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start", marginBottom: "1rem" }}
         onSubmit={(e) => handleSubmit(e)}
       >
         <label>
           <span>title</span>
-          <input type="text" value={blog.title} onChange={(e) => handleChange(e, 'title')} />
+          <input type="text" value={blog.title} onChange={(e) => handleChange(e, "title")} />
         </label>
         <label>
           <span>author</span>
-          <input type="text" value={blog.author} onChange={(e) => handleChange(e, 'author')} />
+          <input type="text" value={blog.author} onChange={(e) => handleChange(e, "author")} />
         </label>
         <label>
           <span>url</span>
-          <input type="text" value={blog.url} onChange={(e) => handleChange(e, 'url')} />
+          <input type="text" value={blog.url} onChange={(e) => handleChange(e, "url")} />
         </label>
         <button type='submit'>Create</button>
       </form>

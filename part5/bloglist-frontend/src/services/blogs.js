@@ -1,10 +1,10 @@
-import axios from 'axios'
-const baseUrl = '/api/blogs'
+import axios from "axios"
+const baseUrl = "/api/blogs"
 
 let token = null
 const setToken = (newToken) => {
   token = `Bearer ${newToken}`
-} 
+}
 
 const getAll = () => {
   const request = axios.get(baseUrl)
@@ -41,5 +41,4 @@ const deleteBlog = (blogId) => {
   return request
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll, postNewBlog, setToken, updateBlog, deleteBlog }

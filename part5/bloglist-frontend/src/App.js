@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import Login from './components/Login'
-import blogService from './services/blogs'
-import NewBlogForm from './components/NewBlogForm'
-import Togglable from './components/Togglable'
+import { useState, useEffect } from "react"
+import Blog from "./components/Blog"
+import Login from "./components/Login"
+import blogService from "./services/blogs"
+import NewBlogForm from "./components/NewBlogForm"
+import Togglable from "./components/Togglable"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,7 +11,7 @@ const App = () => {
   const [loggedUser, setLoggedUser] = useState(null)
 
   const [notification, setNotification] = useState({
-    message: '',
+    message: "",
     isSuccess: false
   })
 
@@ -21,7 +21,7 @@ const App = () => {
       isSuccess
     })
     setTimeout(() => {setNotification({
-      message: '',
+      message: "",
       isSuccess: false
     })}, 3000)
   }
@@ -34,7 +34,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('user')
+    const loggedUserJSON = window.localStorage.getItem("user")
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -46,17 +46,17 @@ const App = () => {
   }, [])
 
   const logOut = () => {
-    window.localStorage.removeItem('user')
+    window.localStorage.removeItem("user")
     setLoggedUser(null)
-    notificationPopup('You have successfully logged out', true)
+    notificationPopup("You have successfully logged out", true)
   }
 
-  let notificationColor = notification.isSuccess ? 'green' : 'red'
+  let notificationColor = notification.isSuccess ? "green" : "red"
   let notificationStyle = {
     color: notificationColor,
     border: `2px solid ${notificationColor}`,
-    width: '50%',
-    padding: '10px 20px'
+    width: "50%",
+    padding: "10px 20px"
   }
 
   return (
@@ -66,7 +66,7 @@ const App = () => {
       <h2>blogs</h2>
       {loggedUser && (
         <div>
-          <p style={{display: 'inline-block'}}>{loggedUser.username} logged in</p>
+          <p style={{ display: "inline-block" }}>{loggedUser.username} logged in</p>
           <button onClick={logOut}>Logout</button>
           <Togglable label="new note">
             <NewBlogForm setBlogs={setBlogs} notificationPopup={notificationPopup} />

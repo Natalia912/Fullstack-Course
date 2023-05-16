@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios from "axios"
 
-const baseUrl = '/api/login'
+const baseUrl = "/api/login"
 
 const loginUser = (user) => {
-  const request = axios.post(baseUrl, {username: user.username, password: user.password})
+  const request = axios.post(baseUrl, { username: user.username, password: user.password })
 
   return request.then(res => res.data)
 }
