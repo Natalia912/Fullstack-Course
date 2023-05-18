@@ -40,21 +40,21 @@ const NewBlogForm = ({ setBlogs, notificationPopup }) => {
       <h2>create new blog</h2>
       <form
         style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start", marginBottom: "1rem" }}
-        onSubmit={(e) => handleSubmit(e)}
+        onSubmit={(e) => handleSubmit(e) }
       >
         <label>
           <span>title</span>
-          <input type="text" value={blog.title} onChange={(e) => handleChange(e, "title")} />
+          <input type="text" id="title-input" value={blog.title} onChange={(e) => handleChange(e, "title")} />
         </label>
         <label>
           <span>author</span>
-          <input type="text" value={blog.author} onChange={(e) => handleChange(e, "author")} />
+          <input type="text" id="author-input" value={blog.author} onChange={(e) => handleChange(e, "author")} />
         </label>
         <label>
           <span>url</span>
-          <input type="text" value={blog.url} onChange={(e) => handleChange(e, "url")} />
+          <input type="text" id="url-input" value={blog.url} onChange={(e) => handleChange(e, "url")} />
         </label>
-        <button type='submit'>Create</button>
+        <button type='submit' id="submit-btn">Create</button>
       </form>
     </>
   )

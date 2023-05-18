@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import blogService from "../services/blogs"
 import userService from "../services/users"
 
-const Blog = ({ blog, loggedUser, blogs, setBlogs }) => {
+const Blog = ({ blog, loggedUser, blogs, setBlogs, addLikes }) => {
   const [open, setOpen] = useState(false)
   const [currentLikes, setCurrentLikes] = useState(blog.likes)
   const [isRemovable, setIsRemovable] = useState(false)
@@ -17,6 +17,7 @@ const Blog = ({ blog, loggedUser, blogs, setBlogs }) => {
     blogService.updateBlog(blog.id, blogData).then(() => {
       setCurrentLikes(prev => prev + 1)
     })
+
   }
 
   const removeBlog = () => {
@@ -58,11 +59,11 @@ const Blog = ({ blog, loggedUser, blogs, setBlogs }) => {
   return (
     <div style={blogStyles}>
       <div>
-        <p>{blog.title} {blog.author} <button onClick={toggleOpen}>{open ? "hide" : "view"}</button></p>
+        <p>{blog.title} {blog.author} <button className="toggleView" onClick={toggleOpen}>{open ? "hide" : "view"}</button></p>
       </div>
-      <div style={{ display: open ? "" : "none" }}>
+      <div className="moreInfo" style={{ display: open ? "" : "none" }}>
         <p>url: {blog.url}</p>
-        <p>likes: {currentLikes} <button onClick={handleLike}>like</button></p>
+        <p>likes: {currentLikes} <button onClick={addLikes ? addLikes : handleLike} className="likeButton">like</button></p>
         <p>author: {blog.author}</p>
         <button style={removeStyles} onClick={removeBlog}>remove</button>
       </div>
