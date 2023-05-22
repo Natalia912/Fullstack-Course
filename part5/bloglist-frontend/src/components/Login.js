@@ -43,13 +43,25 @@ const Login = ({ setLoggedUser, notificationPopup }) => {
       <form autoComplete='off' style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start" }}>
         <label>
           <span>username</span>
-          <input type="text" value={user.username} autoComplete='off' onChange={(e) => handleChange(e, "username")} />
+          <input
+            id="username"
+            type="text"
+            value={user.username}
+            autoComplete='off'
+            onChange={(e) => handleChange(e, "username")}
+          />
         </label>
         <label>
           <span>password</span>
-          <input type="password" value={user.password} autoComplete='off' onChange={(e) => handleChange(e, "password")}/>
+          <input
+            id="password"
+            type="password"
+            value={user.password}
+            autoComplete='off'
+            onChange={(e) => handleChange(e, "password")}
+          />
         </label>
-        <button onClick={(e) => handleSubmit(e)}>Login</button>
+        <button id="login-btn" onClick={(e) => handleSubmit(e)}>Login</button>
       </form>
     </>
   )

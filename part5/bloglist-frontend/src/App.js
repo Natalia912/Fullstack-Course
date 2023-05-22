@@ -61,7 +61,7 @@ const App = () => {
 
   return (
     <div>
-      {notification.message && <p style={notificationStyle}>{notification.message}</p>}
+      {notification.message && <p style={notificationStyle} id="notification">{notification.message}</p>}
       {!loggedUser && <Login setLoggedUser={setLoggedUser} notificationPopup={notificationPopup} />}
       <h2>blogs</h2>
       {loggedUser && (
