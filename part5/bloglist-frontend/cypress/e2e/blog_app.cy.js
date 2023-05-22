@@ -41,9 +41,12 @@ describe("Blog app", () => {
 
   describe("When logged in", function() {
     beforeEach(function() {
-      cy.get("#username").type("mark jackson")
-      cy.get("#password").type("user123")
-      cy.get("#login-btn").click()
+      cy.request("POST", "http://localhost:3003/api/login", {
+        username: "mark jackson", password: "user123"
+      }).then(response => {
+        localStorage.setItem("user", JSON.stringify(response.body))
+        cy.visit("http://localhost:3000")
+      })
     })
 
     it("A blog can be created", function() {
@@ -55,5 +58,31 @@ describe("Blog app", () => {
 
       cy.contains("blog title blog author")
     })
+
+    describe("with a blog", function() {
+      beforeEach(function () {
+        cy.createBlog({
+          title: "created title",
+          author: "userUSer",
+          url: "urlURL"
+        })
+      })
+
+      it("User can like a blog", function() {
+        cy.get(".toggleView").click()
+        cy.get(".likeButton").click()
+
+        cy.get(".likes").contains("likes: 1")
+
+      })
+
+      it("The user can delete their blog", function() {
+        cy.get(".toggleView").click()
+        cy.get(".remove-btn").click()
+
+        cy.get("body").should("not.contain", "created title userUSer")
+      })
+    })
+
   })
 })

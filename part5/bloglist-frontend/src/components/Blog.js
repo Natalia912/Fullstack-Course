@@ -63,9 +63,9 @@ const Blog = ({ blog, loggedUser, blogs, setBlogs, addLikes }) => {
       </div>
       <div className="moreInfo" style={{ display: open ? "" : "none" }}>
         <p>url: {blog.url}</p>
-        <p>likes: {currentLikes} <button onClick={addLikes ? addLikes : handleLike} className="likeButton">like</button></p>
+        <p className="likes">likes: {currentLikes} <button onClick={addLikes ? addLikes : handleLike} className="likeButton">like</button></p>
         <p>author: {blog.author}</p>
-        <button style={removeStyles} onClick={removeBlog}>remove</button>
+        <button style={removeStyles} onClick={removeBlog} className="remove-btn">remove</button>
       </div>
     </div>
   )}
