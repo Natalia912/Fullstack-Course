@@ -67,7 +67,7 @@ const App = () => {
       {loggedUser && (
         <div>
           <p style={{ display: "inline-block" }}>{loggedUser.username} logged in</p>
-          <button onClick={logOut}>Logout</button>
+          <button onClick={logOut} className="logout">Logout</button>
           <Togglable label="new blog">
             <NewBlogForm setBlogs={setBlogs} notificationPopup={notificationPopup} />
           </Togglable>

@@ -82,6 +82,22 @@ describe("Blog app", () => {
 
         cy.get("body").should("not.contain", "created title userUSer")
       })
+
+      it.only("no one except the user can delete their blog", function() {
+        cy.createBlog({
+          title: "delete blog",
+          author: "user delete",
+          url: "delete url"
+        })
+        cy.contains("delete blog").parent().find("button").click()
+        cy.contains("delete url").parent().find(".remove-btn").click()
+
+        cy.get("body").should("not.contain", "delete blog")
+
+        cy.contains("logged in").parent().find(".logout").click()
+        cy.contains("created title").parent().find(".toggleView").click()
+        cy.get("body").should("not.contain", "remove")
+      })
     })
 
   })
