@@ -83,7 +83,7 @@ describe("Blog app", () => {
         cy.get("body").should("not.contain", "created title userUSer")
       })
 
-      it.only("no one except the user can delete their blog", function() {
+      it("no one except the user can delete their blog", function() {
         cy.createBlog({
           title: "delete blog",
           author: "user delete",
@@ -97,6 +97,43 @@ describe("Blog app", () => {
         cy.contains("logged in").parent().find(".logout").click()
         cy.contains("created title").parent().find(".toggleView").click()
         cy.get("body").should("not.contain", "remove")
+      })
+
+      it("blogs are ordered according to likes with the blog with the most likes being first", function() {
+        cy.createBlog({
+          title: "first blog",
+          author: "user",
+          url: "url"
+        })
+        cy.createBlog({
+          title: "second blog",
+          author: "user",
+          url: "url"
+        })
+        cy.createBlog({
+          title: "third blog",
+          author: "user",
+          url: "url"
+        })
+
+        cy.likeBlog("first blog")
+        cy.get(".blog").contains("first blog").parent().parent().find(".likes").contains("likes: 1")
+        cy.likeBlog("first blog")
+        cy.get(".blog").contains("first blog").parent().parent().find(".likes").contains("likes: 2")
+        cy.likeBlog("first blog")
+        cy.get(".blog").contains("first blog").parent().parent().find(".likes").contains("likes: 3")
+        cy.likeBlog("second blog")
+        cy.get(".blog").contains("second blog").parent().parent().find(".likes").contains("likes: 1")
+        cy.likeBlog("second blog")
+        cy.get(".blog").contains("second blog").parent().parent().find(".likes").contains("likes: 2")
+        cy.likeBlog("third blog")
+        cy.get(".blog").contains("third blog").parent().parent().find(".likes").contains("likes: 1")
+        cy.visit("http://localhost:3000/")
+
+        cy.get(".blog").eq(0).should("contain", "first blog")
+        cy.get(".blog").eq(1).should("contain", "second blog")
+        cy.get(".blog").eq(2).should("contain", "third blog")
+
       })
     })
 

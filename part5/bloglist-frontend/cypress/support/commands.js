@@ -37,3 +37,10 @@ Cypress.Commands.add("createBlog", ({ title, author, url }) => {
 
   cy.visit("http://localhost:3000")
 })
+
+
+Cypress.Commands.add("likeBlog", (blogTitle) => {
+  cy.get(".blog").contains(blogTitle).find(".toggleView").click()
+  cy.get(".blog").contains(blogTitle).parent().parent().find(".likeButton").click()
+  cy.get(".blog").contains(blogTitle).find(".toggleView").click()
+})
