@@ -1,4 +1,4 @@
-import { combineReducers } from "redux"
+import { createSlice } from '@reduxjs/toolkit'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -21,11 +21,15 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const anecdoteReducer = (state = initialState, action) => {
-
-  switch(action.type) {
-    case "VOTE": {
-      const id = action.payload.id
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    createNewAnecdote(state, action) {
+      return state.concat(asObject(action.payload))
+    },
+    changeVote(state, action) {
+      const id = action.payload
       const votedNote = state.find(note => note.id === id)
       const addedVote = {
         ...votedNote,
@@ -33,47 +37,8 @@ const anecdoteReducer = (state = initialState, action) => {
       }
       return state.map(note => note.id === id ? addedVote : note)
     }
-    case "NEW_ANECDOTE": {
-      return state.concat(asObject(action.payload))
-    }
-    default: 
-      return state
   }
-}
-
-export const createAnecdoteDispatch = (content) => {
-  return {
-    type: "NEW_ANECDOTE", 
-    payload: content
-  }
-}
-
-export const changeVote = (id) => {
-  return {
-    type: "VOTE",
-    payload: { id }
-  }
-}
-
-const filterReducer = (state = "", action) => {
-  switch (action.type) {
-    case 'SET_FILTER':
-      return action.payload
-    default:
-      return state
-  }
-}
-
-export const filterChange = (filter) => {
-  return {
-    type: 'SET_FILTER',
-    payload: filter
-  }
-}
-
-const reducer = combineReducers({
-  anecdotes: anecdoteReducer,
-  filter: filterReducer
 })
 
-export default reducer
+export const { createNewAnecdote, changeVote } = anecdoteSlice.actions
+export default anecdoteSlice.reducer
