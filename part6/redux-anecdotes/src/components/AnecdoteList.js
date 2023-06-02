@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { changeVote } from '../reducers/anecdoteReducer'
-import { setNotification, unsetNotification} from '../reducers/notificationReducer'
+import { voteAnecdote, initializeAnecdotes } from '../reducers/anecdoteReducer'
+import { newNotification } from '../reducers/notificationReducer'
+import { useEffect } from 'react'
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => {
@@ -9,13 +10,17 @@ const AnecdoteList = () => {
             .filter(note => note.content.toLowerCase().includes(state.filter.toLowerCase()))
   })
 
+  useEffect(() => {
+    dispatch(initializeAnecdotes())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const dispatch = useDispatch()
 
   const vote = (id) => {
-    dispatch(changeVote(id))
+    dispatch(voteAnecdote(id))
     const voted = anecdotes.find(item => item.id === id)
-    dispatch(setNotification(`you voted "${voted.content}"`))
-    setTimeout(() => {dispatch(unsetNotification())}, 5000)
+    dispatch(newNotification(`you voted "${voted.content}"`))
   }
 
   return (
