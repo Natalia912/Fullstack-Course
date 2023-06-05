@@ -3,10 +3,19 @@ import Notification from './components/Notification'
 
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import axios from 'axios'
+import NotificationContext from './notificationContext'
+import { useContext } from 'react'
 
 const App = () => {
 
   const queryClient = useQueryClient()
+  const [notification, dispatch] = useContext(NotificationContext)
+
+  const setNotification = (type, message) => {
+    dispatch({type, payload: message})
+    console.log(message)
+    setTimeout(() => dispatch({type: "UNSET"}), 5000)
+  }
 
 
   const voteMutation = useMutation((anecdote) => {
@@ -24,6 +33,7 @@ const App = () => {
 
   const handleVote = (anecdote) => {
     voteMutation.mutate(anecdote)
+    setNotification("VOTED", anecdote.content)
   }
 
   const result = useQuery(
@@ -48,7 +58,7 @@ const App = () => {
     <div>
       <h3>Anecdote app</h3>
     
-      <Notification />
+      <Notification text={notification} />
       <AnecdoteForm />
     
       {anecdotes.map(anecdote =>

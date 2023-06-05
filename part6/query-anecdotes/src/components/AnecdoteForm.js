@@ -1,9 +1,12 @@
 import { useMutation, useQueryClient } from "react-query"
+import { useNotificationDispatch } from '../notificationContext'
 import axios from "axios"
 
 const AnecdoteForm = () => {
 
   const queryClient = useQueryClient()
+
+  const dispatch = useNotificationDispatch()
 
   const newMutation = useMutation( (anecdote) => {
       return axios.post("http://localhost:3001/anecdotes", {
@@ -14,7 +17,7 @@ const AnecdoteForm = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('anecdotes')
-      },
+      }
     }
   )
 
@@ -22,7 +25,11 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newMutation.mutate({ content })
+    newMutation.mutate({ content }, {
+      onSuccess: () => dispatch({type: "ADDED", payload: content}),
+      onError: () => dispatch({type: "ERROR", payload: "too short, must have length more than 5"})
+    })
+    
 }
 
   return (
