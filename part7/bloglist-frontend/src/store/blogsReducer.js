@@ -32,6 +32,15 @@ export const getAllBlogs = () => {
   }
 }
 
+export const addNewBlog = (blog) => {
+  return async dispatch => {
+    const result = await blogService.postNewBlog(blog)
+    if (result) {
+      dispatch(appendBlog(result))
+    }
+  }
+}
+
 export const updateBlog = (id, data) => {
   return async dispatch => {
     await blogService.updateBlog(id, data)

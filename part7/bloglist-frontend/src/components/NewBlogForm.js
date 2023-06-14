@@ -1,8 +1,7 @@
 import { useState } from "react"
-import blogServices from "../services/blogs"
 import { useDispatch } from "react-redux"
 import { notificationPopup } from "../store/notificationReducer"
-import { appendBlog } from "../store/blogsReducer"
+import { addNewBlog } from "../store/blogsReducer"
 
 const NewBlogForm = () => {
 
@@ -26,17 +25,13 @@ const NewBlogForm = () => {
     if (!blog.title || !blog.author || !blog.url) {
       dispatch(notificationPopup("Please fill out all the fields", false))
     } else {
-      blogServices.postNewBlog(blog).then(data => {
-        dispatch(appendBlog(data))
-        setBlog({
-          title: "",
-          author: "",
-          url: ""
-        })
-        dispatch(notificationPopup(`a new blog ${data.title} by ${data.author}`, true))
-      }).catch(error => {
-        dispatch(notificationPopup(error, false))
+      dispatch(addNewBlog(blog))
+      setBlog({
+        title: "",
+        author: "",
+        url: ""
       })
+      dispatch(notificationPopup(`a new blog ${blog.title} by ${blog.author}`, true))
     }
   }
 

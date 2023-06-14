@@ -1,13 +1,11 @@
 import { useState } from "react"
-import loginUser from "../services/login"
-import blogServices from "../services/blogs"
 import { useDispatch } from "react-redux"
 import { notificationPopup } from "../store/notificationReducer"
+import { loginUserFunction } from "../store/userReducer"
 
-const Login = ({ setLoggedUser }) => {
+const Login = () => {
 
   const dispatch = useDispatch()
-
 
   const [user, setUser] = useState({
     username: "",
@@ -27,15 +25,7 @@ const Login = ({ setLoggedUser }) => {
     if (!user.username || !user.password) {
       dispatch(notificationPopup("Please fill out all the fields", false))
     } else {
-      loginUser(user).then(data => {
-        setLoggedUser(data)
-        blogServices.setToken(data.token)
-        window.localStorage.setItem("user", JSON.stringify(data))
-        dispatch(notificationPopup(`Welcome, ${user.username}`, true))
-      }).catch(() => {
-        dispatch(notificationPopup("invalid username or password", false))
-      })
-
+      dispatch(loginUserFunction(user))
       setUser({
         username: "",
         password: ""
