@@ -2,8 +2,9 @@ import { useState } from "react"
 import blogServices from "../services/blogs"
 import { useDispatch } from "react-redux"
 import { notificationPopup } from "../store/notificationReducer"
+import { appendBlog } from "../store/blogsReducer"
 
-const NewBlogForm = ({ setBlogs }) => {
+const NewBlogForm = () => {
 
   const dispatch = useDispatch()
 
@@ -26,7 +27,7 @@ const NewBlogForm = ({ setBlogs }) => {
       dispatch(notificationPopup("Please fill out all the fields", false))
     } else {
       blogServices.postNewBlog(blog).then(data => {
-        setBlogs(prev => ([...prev, data]))
+        dispatch(appendBlog(data))
         setBlog({
           title: "",
           author: "",
