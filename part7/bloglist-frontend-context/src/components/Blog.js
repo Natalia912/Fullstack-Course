@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import PropTypes from "prop-types"
 import blogService from "../services/blogs"
 import userService from "../services/users"
+import BlogContext from "../store/blogContext"
 
-const Blog = ({ blog, loggedUser, blogs, setBlogs, addLikes }) => {
+
+const Blog = ({ blog, loggedUser }) => {
   const [open, setOpen] = useState(false)
-  const [currentLikes, setCurrentLikes] = useState(blog.likes)
   const [isRemovable, setIsRemovable] = useState(false)
   const toggleOpen = () => { setOpen(prev => !prev) }
+
+  const { blogsDispatch } = useContext(BlogContext)
+
 
   const handleLike = () => {
     const blogData = {
@@ -15,7 +19,7 @@ const Blog = ({ blog, loggedUser, blogs, setBlogs, addLikes }) => {
       likes: blog.likes + 1
     }
     blogService.updateBlog(blog.id, blogData).then(() => {
-      setCurrentLikes(prev => prev + 1)
+      blogsDispatch({ type: "UPDATE_BLOG", payload: blogData })
     })
 
   }
@@ -23,8 +27,7 @@ const Blog = ({ blog, loggedUser, blogs, setBlogs, addLikes }) => {
   const removeBlog = () => {
     if (window.confirm(`Do you really want to delete "${blog.title}"`)) {
       blogService.deleteBlog(blog.id).then(() => {
-        const filteredBlogs = blogs.filter(item => item.id !== blog.id)
-        setBlogs(filteredBlogs)
+        blogsDispatch({ type: "DELETE_BLOG", payload: { id: blog.id } })
       })
     }
   }
@@ -63,7 +66,9 @@ const Blog = ({ blog, loggedUser, blogs, setBlogs, addLikes }) => {
       </div>
       <div className="moreInfo" style={{ display: open ? "" : "none" }}>
         <p>url: {blog.url}</p>
-        <p className="likes">likes: {currentLikes} <button onClick={addLikes ? addLikes : handleLike} className="likeButton">like</button></p>
+        <p className="likes">likes: {blog.likes}
+          {loggedUser && <button onClick={handleLike} className="likeButton">like</button>}
+        </p>
         <p>author: {blog.author}</p>
         {loggedUser && <button style={removeStyles} onClick={removeBlog} className="remove-btn">remove</button>}
       </div>
@@ -73,8 +78,6 @@ const Blog = ({ blog, loggedUser, blogs, setBlogs, addLikes }) => {
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   loggedUser: PropTypes.object,
-  blogs: PropTypes.array.isRequired,
-  setBlogs: PropTypes.func.isRequired
 }
 
 export default Blog

@@ -1,10 +1,12 @@
 import { useContext, useState } from "react"
 import blogServices from "../services/blogs"
 import NotificationContext from "../store/notificationContext"
+import BlogContext from "../store/blogContext"
 
-const NewBlogForm = ({ setBlogs }) => {
+const NewBlogForm = () => {
 
   const { notificationPopup } = useContext(NotificationContext)
+  const { blogsDispatch } = useContext(BlogContext)
 
   const [blog, setBlog] = useState({
     title: "",
@@ -25,7 +27,7 @@ const NewBlogForm = ({ setBlogs }) => {
       notificationPopup("Please fill out all the fields", false)
     } else {
       blogServices.postNewBlog(blog).then(data => {
-        setBlogs(prev => ([...prev, data]))
+        blogsDispatch({ type: "ADD_BLOG", payload: data })
         setBlog({
           title: "",
           author: "",

@@ -5,18 +5,18 @@ import blogService from "./services/blogs"
 import NewBlogForm from "./components/NewBlogForm"
 import Togglable from "./components/Togglable"
 import NotificationContext from "./store/notificationContext"
+import BlogContext from "./store/blogContext"
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-
   const [loggedUser, setLoggedUser] = useState(null)
 
+  const { blogs, blogsDispatch } = useContext(BlogContext)
   const { notification, notificationPopup } = useContext(NotificationContext)
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
       blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs( blogs )
+      blogsDispatch({ type: "SET_BLOGS", payload: blogs })
     })
   }, [])
 
@@ -56,13 +56,15 @@ const App = () => {
           <p style={{ display: "inline-block" }}>{loggedUser.username} logged in</p>
           <button onClick={logOut} className="logout">Logout</button>
           <Togglable label="new blog">
-            <NewBlogForm setBlogs={setBlogs} />
+            <NewBlogForm />
           </Togglable>
         </div>
       )}
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} loggedUser={loggedUser} blogs={blogs} setBlogs={setBlogs} />
-      )}
+      {[...blogs]
+        .sort((a, b) => b.likes - a.likes)
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} loggedUser={loggedUser} />
+        )}
     </div>
   )
 }

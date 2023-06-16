@@ -1,4 +1,5 @@
 import { NotificationContextProvider } from "./notificationContext"
+import { BlogContextProvider } from "./blogContext"
 
 const compose = (providers) => (
   // eslint-disable-next-line react/display-name
@@ -8,6 +9,6 @@ const compose = (providers) => (
     </Prev>
   )))
 
-const Provider = compose([NotificationContextProvider])
+const Provider = compose([NotificationContextProvider, BlogContextProvider])
 
 export default Provider
