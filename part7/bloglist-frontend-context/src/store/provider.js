@@ -1,6 +1,5 @@
 import { NotificationContextProvider } from "./notificationContext"
-import { BlogContextProvider } from "./blogContext"
-
+import { UserContextProvider } from "./userContext"
 const compose = (providers) => (
   // eslint-disable-next-line react/display-name
   providers.reduce((Prev, Curr) => ({ children }) => (
@@ -9,6 +8,6 @@ const compose = (providers) => (
     </Prev>
   )))
 
-const Provider = compose([NotificationContextProvider, BlogContextProvider])
+const Provider = compose([NotificationContextProvider, UserContextProvider])
 
 export default Provider

@@ -22,12 +22,12 @@ const postNewBlog = (blogData) => {
   return request.then(res => res.data)
 }
 
-const updateBlog = (blogId, blogData) => {
+const updateBlog = (blogData) => {
   const config = {
     headers: { Authorization: token },
   }
 
-  const request = axios.put(`${baseUrl}/${blogId}`, blogData, config)
+  const request = axios.put(`${baseUrl}/${blogData.id}`, blogData, config)
   return request.then(res => res.data)
 }
 

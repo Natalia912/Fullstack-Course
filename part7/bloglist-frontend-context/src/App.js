@@ -1,31 +1,26 @@
-import { useState, useEffect, useContext } from "react"
+import { useEffect, useContext } from "react"
 import Blog from "./components/Blog"
 import Login from "./components/Login"
 import blogService from "./services/blogs"
 import NewBlogForm from "./components/NewBlogForm"
 import Togglable from "./components/Togglable"
 import NotificationContext from "./store/notificationContext"
-import BlogContext from "./store/blogContext"
+import { useQuery } from "react-query"
+import UserContext from "./store/userContext"
 
 const App = () => {
-  const [loggedUser, setLoggedUser] = useState(null)
 
-  const { blogs, blogsDispatch } = useContext(BlogContext)
+  const { user, userDispatch } = useContext(UserContext)
   const { notification, notificationPopup } = useContext(NotificationContext)
 
-  useEffect(() => {
-    blogService.getAll().then(blogs => {
-      blogs.sort((a, b) => b.likes - a.likes)
-      blogsDispatch({ type: "SET_BLOGS", payload: blogs })
-    })
-  }, [])
+  const { isLoading, data } = useQuery("blogs", blogService.getAll)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("user")
 
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setLoggedUser(user)
+      const loggedUser = JSON.parse(loggedUserJSON)
+      userDispatch({ type: "SET", payload: loggedUser })
       blogService.setToken(user.token)
       notificationPopup(`Welcome, ${user.name}`, true)
     }
@@ -34,7 +29,7 @@ const App = () => {
 
   const logOut = () => {
     window.localStorage.removeItem("user")
-    setLoggedUser(null)
+    userDispatch({ type: "UNSET" })
     notificationPopup("You have successfully logged out", true)
   }
 
@@ -49,21 +44,22 @@ const App = () => {
   return (
     <div>
       {notification.message && <p style={notificationStyle} id="notification">{notification.message}</p>}
-      {!loggedUser && <Login setLoggedUser={setLoggedUser} />}
+      {!user && <Login />}
       <h2>blogs</h2>
-      {loggedUser && (
+      {user && (
         <div>
-          <p style={{ display: "inline-block" }}>{loggedUser.username} logged in</p>
+          <p style={{ display: "inline-block" }}>{user.username} logged in</p>
           <button onClick={logOut} className="logout">Logout</button>
           <Togglable label="new blog">
             <NewBlogForm />
           </Togglable>
         </div>
       )}
-      {[...blogs]
+      { isLoading && <p>blogs are loading</p>}
+      {data && [...data]
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} loggedUser={loggedUser} />
+          <Blog key={blog.id} blog={blog} />
         )}
     </div>
   )

@@ -1,17 +1,31 @@
 import { useContext, useState } from "react"
 import blogServices from "../services/blogs"
 import NotificationContext from "../store/notificationContext"
-import BlogContext from "../store/blogContext"
+import { useMutation, useQueryClient } from "react-query"
 
 const NewBlogForm = () => {
-
-  const { notificationPopup } = useContext(NotificationContext)
-  const { blogsDispatch } = useContext(BlogContext)
 
   const [blog, setBlog] = useState({
     title: "",
     author: "",
     url: ""
+  })
+  const { notificationPopup } = useContext(NotificationContext)
+
+  const queryClient = useQueryClient()
+  const blogAddMutation = useMutation(blogServices.postNewBlog, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("blogs")
+      setBlog({
+        title: "",
+        author: "",
+        url: ""
+      })
+      notificationPopup(`a new blog ${blog.title} by ${blog.author}`, true)
+    },
+    onError: () => {
+      notificationPopup("something went wrong, please try again", false)
+    }
   })
 
   const handleChange = (e, inputName) => {
@@ -26,17 +40,7 @@ const NewBlogForm = () => {
     if (!blog.title || !blog.author || !blog.url) {
       notificationPopup("Please fill out all the fields", false)
     } else {
-      blogServices.postNewBlog(blog).then(data => {
-        blogsDispatch({ type: "ADD_BLOG", payload: data })
-        setBlog({
-          title: "",
-          author: "",
-          url: ""
-        })
-        notificationPopup(`a new blog ${data.title} by ${data.author}`, true)
-      }).catch(error => {
-        notificationPopup(error, false)
-      })
+      blogAddMutation.mutate(blog)
     }
   }
 

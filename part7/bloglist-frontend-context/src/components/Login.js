@@ -2,10 +2,12 @@ import { useContext, useState } from "react"
 import loginUser from "../services/login"
 import blogServices from "../services/blogs"
 import NotificationContext from "../store/notificationContext"
+import UserContext from "../store/userContext"
 
-const Login = ({ setLoggedUser }) => {
+const Login = () => {
 
   const { notificationPopup } = useContext(NotificationContext)
+  const { userDispatch } = useContext(UserContext)
 
   const [user, setUser] = useState({
     username: "",
@@ -26,7 +28,7 @@ const Login = ({ setLoggedUser }) => {
       notificationPopup("Please fill out all the fields", false)
     } else {
       loginUser(user).then(data => {
-        setLoggedUser(data)
+        userDispatch({ type: "SET", payload: data })
         blogServices.setToken(data.token)
         window.localStorage.setItem("user", JSON.stringify(data))
         notificationPopup(`Welcome, ${user.username}`, true)
