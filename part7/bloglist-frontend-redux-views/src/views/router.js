@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom"
 import BlogsList from "./BlogsList"
 import Users from "./Users"
+import User from "./User"
 
 export const router = createBrowserRouter([
   {
@@ -9,6 +10,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "users",
-    element: <Users />
+    element: <Users />,
+  },
+  {
+    path: "users/:userId",
+    element: <User />
   }
 ])
