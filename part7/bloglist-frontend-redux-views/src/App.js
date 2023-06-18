@@ -1,10 +1,9 @@
 import { useEffect } from "react"
-import { RouterProvider } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 import Login from "./components/Login"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllBlogs } from "./store/blogsReducer"
 import { getUserFromLocalStorage, logOutUser } from "./store/userReducer"
-import { router } from "./views/router"
 
 const App = () => {
   const loggedUser = useSelector(state => state.user)
@@ -30,16 +29,27 @@ const App = () => {
 
   return (
     <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">blogs</Link>
+          </li>
+          <li>
+            <Link to="users">users</Link>
+          </li>
+        </ul>
+        {loggedUser && (
+          <div>
+            <p style={{ display: "inline-block" }}>{loggedUser.username} logged in</p>
+            <button onClick={logOut} className="logout">Logout</button>
+          </div>
+        )}
+      </nav>
       {notification.message && <p style={notificationStyle} id="notification">{notification.message}</p>}
       {!loggedUser && <Login />}
       <h2>blogs</h2>
-      {loggedUser && (
-        <div>
-          <p style={{ display: "inline-block" }}>{loggedUser.username} logged in</p>
-          <button onClick={logOut} className="logout">Logout</button>
-        </div>
-      )}
-      <RouterProvider router={router} />
+
+      <Outlet />
     </div>
   )
 }
