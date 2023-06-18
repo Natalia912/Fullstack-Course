@@ -7,11 +7,6 @@ const BlogsList = () => {
   const blogs = useSelector(state => state.blogs)
   const loggedUser = useSelector(state => state.user)
 
-  const blogStyles = {
-    border: "1px solid black",
-    padding: "1rem",
-    marginBottom: "1rem",
-  }
   return (
     <div>
       { loggedUser &&
@@ -24,7 +19,7 @@ const BlogsList = () => {
           .sort((a, b) => b.likes - a.likes)
           .map(blog =>
             <Link key={blog.id} to={`blogs/${blog.id}`}>
-              <p style={blogStyles}>{blog.title} {blog.author}</p>
+              <p className="border-2 bg-slate-100 border-slate-700 p-2 my-2">{blog.title} {blog.author}</p>
             </Link>
           )}
       </div>

@@ -19,10 +19,10 @@ const User = () => {
 
   return (
     <>
-      <h2>{user?.name}</h2>
-      <h3>added blogs</h3>
-      <ul>
-        {user?.blogs.map(item => <li key={item.id}>{item.title}</li>)}
+      <h2 className="text-xl capitalize font-bold my-4">{user?.name}</h2>
+      <h3 className="text-lg capitalize font-bold my-4">added blogs</h3>
+      <ul className="bg-slate-200 p-4 w-max min-w-[300px]">
+        {user?.blogs.map(item => <li className="list-decimal list-inside" key={item.id}>{item.title}</li>)}
       </ul>
     </>
   )

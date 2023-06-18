@@ -34,10 +34,10 @@ const Login = () => {
   }
   return (
     <>
-      <h2>Log in to application</h2>
-      <form autoComplete='off' style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start" }}>
-        <label>
-          <span>username</span>
+      <h2 className="text-xl capitalize font-bold my-4">Log in to application</h2>
+      <form className="flex flex-col gap-3 items-start mb-2 bg-slate-200 p-4 w-[300px]" autoComplete='off'>
+        <label className="flex justify-between w-full">
+          <p className="capitalize mr-2">username</p>
           <input
             id="username"
             type="text"
@@ -46,8 +46,8 @@ const Login = () => {
             onChange={(e) => handleChange(e, "username")}
           />
         </label>
-        <label>
-          <span>password</span>
+        <label className="flex justify-between w-full">
+          <p className="capitalize mr-2">password</p>
           <input
             id="password"
             type="password"
@@ -56,7 +56,7 @@ const Login = () => {
             onChange={(e) => handleChange(e, "password")}
           />
         </label>
-        <button id="login-btn" onClick={(e) => handleSubmit(e)}>Login</button>
+        <button className="bg-green-900 text-white p-2 hover:text-green-900 hover:bg-white border-2 border-green-900 w-full" id="login-btn" onClick={(e) => handleSubmit(e)}>Login</button>
       </form>
     </>
   )

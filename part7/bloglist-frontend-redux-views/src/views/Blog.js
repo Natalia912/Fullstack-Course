@@ -59,12 +59,6 @@ const Blog = () => {
 
   const removeStyles = {
     display: isRemovable ? "" : "none",
-    backgroundColor: "red",
-    color: "white",
-    borderRadius: "10px",
-    padding: "5px 10px",
-    marginTop: "10px",
-    cursor: "pointer"
   }
 
   if (!blog) {
@@ -73,19 +67,19 @@ const Blog = () => {
 
   return (
 
-    <div className="moreInfo">
-      <p>url: {blog.url}</p>
-      <p className="likes">likes: {blog.likes}
-        {loggedUser && <button onClick={handleLike} className="likeButton">like</button>}
+    <div className="moreInfo bg-slate-200 p-4 w-max">
+      <p className="text-lg">url: {blog.url}</p>
+      <p className="likes text-lg">likes: {blog.likes}
+        {loggedUser && <button onClick={handleLike} className="likeButton bg-green-900 text-white rounded-sm px-3 hover:text-green-900 hover:bg-slate-200 ml-4">like</button>}
       </p>
-      <p>author: {blog.author}</p>
-      {loggedUser && <button style={removeStyles} onClick={removeBlog} className="remove-btn">remove</button>}
+      <p className="text-lg">author: {blog.author}</p>
+      {loggedUser && <button style={removeStyles} onClick={removeBlog} className="remove-btn capitalize w-full bg-red-700 text-white rounded-sm px-2 py-1 mt-2">remove</button>}
 
-      <p>comments</p>
-      <input type="text" value={newComment} onChange={(e) => setNewComment(e.target.value)}/>
-      <button onClick={handleComment}>add comment</button>
+      <p className="text-lg font-bold my-2">comments</p>
+      <input className="p-2 border-2 border-green-900 mr-2" type="text" value={newComment} onChange={(e) => setNewComment(e.target.value)}/>
+      <button onClick={handleComment} className="bg-green-900 text-white p-2 hover:text-green-900 hover:bg-white border-2 border-green-900">add comment</button>
       <ul>
-        {blog.comments?.map((com, i) => <li key={`${com + i}`}>{com}</li>)}
+        {blog.comments?.map((com, i) => <li className="bg-white p-2 mt-2" key={`${com + i}`}>{com}</li>)}
       </ul>
     </div>
   )}

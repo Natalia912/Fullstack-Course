@@ -13,21 +13,21 @@ const Users = () => {
 
   return (
     <>
-      <h2>Users</h2>
-      <table>
+      <h2 className="text-xl capitalize font-bold my-4">Users</h2>
+      <table className="bg-slate-200 w-[400px] h-[200px]">
         <thead>
           <tr>
             <th></th>
-            <th>blogs created</th>
+            <th className="text-center p-2">blogs created</th>
           </tr>
         </thead>
         <tbody>
           {users?.map(user => (
             <tr key={user.name}>
-              <td>
+              <td className="px-2 text-green-950 underline">
                 <Link to={user.id}>{user.name}</Link>
               </td>
-              <td>{user.blogs.length}</td>
+              <td className="px-2 text-center">{user.blogs.length}</td>
             </tr>
           ))}
         </tbody>

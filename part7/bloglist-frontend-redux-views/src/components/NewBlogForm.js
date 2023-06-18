@@ -37,24 +37,24 @@ const NewBlogForm = () => {
 
   return (
     <>
-      <h2>create new blog</h2>
+      <h2 className="text-xl capitalize font-bold my-2">create new blog</h2>
       <form
-        style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start", marginBottom: "1rem" }}
         onSubmit={(e) => handleSubmit(e) }
+        className="flex flex-col gap-3 items-start mb-2 bg-slate-200 p-4 w-[300px]"
       >
-        <label>
-          <span>title</span>
+        <label className="flex justify-between w-full">
+          <p className="capitalize mr-2">title</p>
           <input type="text" id="title-input" value={blog.title} onChange={(e) => handleChange(e, "title")} />
         </label>
-        <label>
-          <span>author</span>
+        <label className="flex justify-between w-full">
+          <p className="capitalize mr-2">author</p>
           <input type="text" id="author-input" value={blog.author} onChange={(e) => handleChange(e, "author")} />
         </label>
-        <label>
-          <span>url</span>
+        <label className="flex justify-between w-full">
+          <p className="capitalize mr-2">url</p>
           <input type="text" id="url-input" value={blog.url} onChange={(e) => handleChange(e, "url")} />
         </label>
-        <button type='submit' id="submit-btn">Create</button>
+        <button type='submit' id="submit-btn" className="bg-green-900 text-white p-2 hover:text-green-900 hover:bg-white border-2 border-green-900 w-full">Create</button>
       </form>
     </>
   )
