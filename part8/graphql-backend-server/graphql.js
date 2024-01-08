@@ -7,7 +7,9 @@ const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 const Author = require('./mongoose/author')
 const Book = require('./mongoose/book')
-
+const { GraphQLError } = require('graphql')
+const User = require('./mongoose/user')
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const MONGODB_URI = process.env.MONGODB_URI
@@ -39,11 +41,22 @@ const typeDefs = `
     genres: [String]!
   }
 
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+
+  type Token {
+    value: String!
+  }
+
   type Query {
     bookCount: Int!,
     authorCount: Int!,
     allBooks(author: String, genre: String): [Book]!,
-    allAuthors: [Author]!
+    allAuthors: [Author]!,
+    me: User
   }
 
   type Mutation {
@@ -56,7 +69,15 @@ const typeDefs = `
     editAuthor(
       name: String!,
       setBornTo: Int!
-    ) : Author
+    ) : Author,
+    createUser(
+      username: String!
+      favoriteGenre: String!
+    ): User,
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 `
 
@@ -68,7 +89,10 @@ const resolvers = {
       return Book.find({author: args.author, genres: { $all: [args.genre] }})
      
     },
-    allAuthors: async () => Author.find({})
+    allAuthors: async () => Author.find({}),
+    me: (root, args, context) => {
+      return context.currentUser
+    }
   },
   Author: {
     bookCount: (root) => {
@@ -77,15 +101,94 @@ const resolvers = {
     }
   },
   Mutation: {
-    addBook: (root, args) => {
+    addBook: (root, args, context) => {
+      const currentUser = context.currentUser
+
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        })
+      }
       const newBook = new Book({...args, id: uuid()})
-      return newBook.save()
+      try {newBook.save()}
+      catch (error) {
+        throw new GraphQLError('Saving book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title,
+            error
+          }
+        })
+      }
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        })
+      }
       const toEdit = await Author.findOne({name: args.name})
+      if (!toEdit) {
+        throw new GraphQLError('Editing author failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      }
       toEdit.born = args.setBornTo
-      return toEdit.save()
-    }
+      try {
+       toEdit.save()
+      }
+       catch (error) {
+        throw new GraphQLError('Editing author failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+       }
+    },
+    createUser: async (root, args) => {
+      const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
+
+      return user.save()
+        .catch(error => {
+          throw new GraphQLError('Creating the user failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.username,
+              error
+            }
+          })
+        })
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
+
+      if ( !user || args.password !== 'secret' ) {
+        throw new GraphQLError('wrong credentials', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })        
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
   }
 }
 
