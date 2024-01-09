@@ -8,7 +8,13 @@ interface Result {
   average: number
 }
 
-const exerciseCalculator = (data: number[], goal: number):Result => {
+const exerciseCalculator = (data: number[], goal: number):Result | string => {
+  if (data.some((el:number) => typeof el !== 'number' || isNaN(Number(el)))) {
+    return 'Incorrect values'
+  }
+  if (typeof goal !== 'number' || isNaN(goal)) {
+    return 'Incorrect value of the goal'
+  }
   const days = data.length
   const trainingDays = data.filter(num => num !== 0).length
   const hoursTotal = data.reduce((prev,cur) => prev + cur, 0)
@@ -37,4 +43,16 @@ const exerciseCalculator = (data: number[], goal: number):Result => {
   }
 }
 
-console.log(exerciseCalculator([3, 0, 2, 4.5, 0, 3, 1], 2))
+const goal: number = Number(process.argv[2])
+const days: string[] = process.argv.slice(3)
+
+try {
+  let daysNum = days.map((el:string) => Number(el))
+  console.log(exerciseCalculator(daysNum, goal))
+} catch (error: unknown) {
+  let errorMessage = 'Something went wrong: '
+  if (error instanceof Error) {
+    errorMessage += error.message;
+  }
+  console.log(errorMessage);
+}
