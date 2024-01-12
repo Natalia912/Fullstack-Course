@@ -1,4 +1,4 @@
-interface Result {
+export interface Result {
   periodLength: number,
   trainingDays: number,
   success: boolean,
@@ -8,7 +8,7 @@ interface Result {
   average: number
 }
 
-const exerciseCalculator = (data: number[], goal: number):Result | string => {
+export const exerciseCalculator = (data: number[], goal: number):Result | string => {
   if (data.some((el:number) => typeof el !== 'number' || isNaN(Number(el)))) {
     return 'Incorrect values';
   }
